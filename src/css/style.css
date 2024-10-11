@@ -20,7 +20,7 @@ body{
     right: 0;
     bottom: 0;
     background-color: #333;
-    background-image: url('../../public/images/virtua.png');
+    background-image: url('../images/virtua.png');
     background-size: cover;
     z-index: 1;
 }
