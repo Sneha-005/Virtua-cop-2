@@ -5,9 +5,9 @@ canvas.height=window.innerHeight;
 
 let gameSpeed = 5;
 const backgroundlayer1 = new Image();
-backgroundlayer1.src = 'real2.jpg';
+backgroundlayer1.src = '../images/real2.jpg';
 const backgroundlayer2 = new Image();
-backgroundlayer2.src = 'real.jpg';
+backgroundlayer2.src = '../images/real.jpg';
 let playerx = canvas.width/2;
 let playery = 600;
 let playerSpeed =5;
