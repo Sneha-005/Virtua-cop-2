@@ -22,13 +22,19 @@ let x=0;
 let x2=1400;
 function animate(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    if(keys['ArrowLeft'] && playerx>0){
+    if((keys['ArrowLeft'] || keys['Keya'] || keys['KeyA'] )&& playerx>0){
         x+=gameSpeed;
         x2+=gameSpeed;
     }
-    if(keys['ArrowRight'] && playerx < canvas.width){
+    if((keys['ArrowRight'] || keys['Keyd'] || keys['KeyD'] )&& playerx < canvas.width){
         x-=gameSpeed;
         x2-=gameSpeed;
+    }
+    if((keys['ArrowUp'] || keys['Keyw'] || keys['KeyW'] )&& playery>0){
+        playery-=playerSpeed;
+   }
+    if((keys['ArrowDown'] || keys['Keys'] || keys['KeyS'] )&& playery < canvas.height-50){
+        playery+=playerSpeed;
     }
 
     ctx.drawImage(backgroundlayer1,x,0);
