@@ -5,11 +5,11 @@ canvas.height=window.innerHeight;
 
 let gameSpeed = 5;
 const backgroundlayer1 = new Image();
-backgroundlayer1.src = 'game2.png';
+backgroundlayer1.src = 'real2.jpg';
 const backgroundlayer2 = new Image();
-backgroundlayer2.src = 'game1.png';
+backgroundlayer2.src = 'real.jpg';
 let playerx = canvas.width/2;
-let playery = 100;
+let playery = 600;
 let playerSpeed =5;
 let keys ={};
 window.addEventListener('keydown',function(e){
