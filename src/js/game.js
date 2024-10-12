@@ -1,4 +1,4 @@
-const canvas = document.getElementById("gameCanvas");
+const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
@@ -13,17 +13,26 @@ const player = {
   speed: 5,
   dx: 0,
   dz: 0,
+  originalWidth: 50,
+  originalHeight: 50,
 };
 
-// Load background image
+const boundaries = {
+  left: 100,
+  right: canvas.width - 100,
+  top: 100,
+  bottom: canvas.height - 100,
+};
+
+let dec = 0.9;
+
 const backgroundImage = new Image();
-backgroundImage.src = "../images/virtua1[1].png"; // Replace with the path to your background image
+backgroundImage.src = "../images/virtua1[1].png";
 
 let backgroundX = 0;
 let backgroundY = 0;
 let backgroundScale = 1;
 
-// Function to draw the background
 function drawBackground() {
   const scaledWidth = canvas.width * backgroundScale;
   const scaledHeight = canvas.height * backgroundScale;
@@ -39,7 +48,6 @@ function drawBackground() {
   );
 }
 
-// Function to draw the player
 function drawPlayer() {
   ctx.fillStyle = player.color;
   ctx.fillRect(
@@ -50,39 +58,71 @@ function drawPlayer() {
   );
 }
 
-// Function to move the player
 function movePlayer() {
-  backgroundX -= player.dx * 0.5;
-  backgroundY -= player.dz * 0.5;
-  backgroundScale += player.dz * 0.01;
+  player.x += player.dx;
+  player.y += player.dz;
 
-  // Prevent background scale from becoming too small or too large
-  if (backgroundScale < 1) backgroundScale = 1;
-  if (backgroundScale > 2) backgroundScale = 2;
+  if (player.dx !== 0 && player.dz !== 0) {
+    player.width *= 0.99;
+    player.height *= 0.99;
+  }
+
+  if (player.x < boundaries.left + player.width / 2)
+    player.x = boundaries.left + player.width / 2;
+  if (player.x > boundaries.right - player.width / 2)
+    player.x = boundaries.right - player.width / 2;
+  if (player.y < boundaries.top + player.height / 2)
+    player.y = boundaries.top + player.height / 2;
+  if (player.y > boundaries.bottom - player.height / 2)
+    player.y = boundaries.bottom - player.height / 2;
 }
 
-// Event listeners for keyboard controls
 document.addEventListener("keydown", (event) => {
-  if (event.key === "ArrowRight") {
-    player.dx = player.speed;
-  } else if (event.key === "ArrowLeft") {
-    player.dx = -player.speed;
-  } else if (event.key === "ArrowUp") {
-    player.dz = player.speed;
+  if (event.key === "ArrowUp") {
+    backgroundScale += 0.1;
   } else if (event.key === "ArrowDown") {
-    player.dz = -player.speed;
-  }
-});
-
-document.addEventListener("keyup", (event) => {
-  if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
-    player.dx = 0;
-  } else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+    backgroundScale -= 0.1;
+    if (backgroundScale < 1) backgroundScale = 1;
+  } else if (event.key === "w" || event.key === "W") {
+    player.dx = -player.speed * Math.cos(Math.PI / 5.9);
+    player.dz = -player.speed * Math.sin(Math.PI / 5.9);
+    player.width = player.originalWidth * dec;
+    player.height = player.originalHeight * dec;
+    if (dec > 0.1) dec -= 0.1;
+  } else if (event.key === "s" || event.key === "S") {
+    player.dx = player.speed * Math.cos(Math.PI / 5.9);
+    player.dz = player.speed * Math.sin(Math.PI / 5.9);
+    player.width = player.originalWidth * dec;
+    player.height = player.originalHeight * dec;
+    if (dec < 0.9) dec += 0.1;
+  } else if (event.key === "a" || event.key === "A") {
+    player.dx = -player.speed;
+    player.dz = 0;
+  } else if (event.key === "d" || event.key === "D") {
+    player.dx = player.speed;
     player.dz = 0;
   }
 });
 
-// Game loop
+document.addEventListener("keyup", (event) => {
+  if (
+    event.key === "w" ||
+    event.key === "W" ||
+    event.key === "s" ||
+    event.key === "S"
+  ) {
+    player.dx = 0;
+    player.dz = 0;
+  } else if (
+    event.key === "a" ||
+    event.key === "A" ||
+    event.key === "d" ||
+    event.key === "D"
+  ) {
+    player.dx = 0;
+  }
+});
+
 function gameLoop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBackground();
@@ -91,5 +131,4 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
-// Initial call to start the game loop
 gameLoop();
